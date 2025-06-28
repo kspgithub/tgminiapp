@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --tg-color-bg: #ffffff;
+  --tg-color-text: #000000;
+  --tg-color-hint: #999999;
+  --tg-color-link: #2481cc;
+  --tg-color-button: #2481cc;
+  --tg-color-button-text: #ffffff;
+  --tg-color-secondary-bg: #f1f1f1;
+}
+
+[data-theme="dark"] {
+  --tg-color-bg: #212121;
+  --tg-color-text: #ffffff;
+  --tg-color-hint: #aaaaaa;
+  --tg-color-link: #8774e1;
+  --tg-color-button: #8774e1;
+  --tg-color-button-text: #ffffff;
+  --tg-color-secondary-bg: #0f0f0f;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--tg-color-bg);
+  color: var(--tg-color-text);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.telegram-button {
+  @apply bg-tg-button text-tg-button-text px-4 py-2 rounded-lg font-medium;
+  @apply hover:opacity-80 active:scale-95 transition-all duration-200;
+}
+
+.telegram-card {
+  @apply bg-tg-secondary-bg rounded-lg p-4 shadow-sm;
+}
