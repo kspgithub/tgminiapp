@@ -29,6 +29,9 @@ RUN docker-php-ext-install zip
 # Установка расширения exif
 RUN docker-php-ext-install exif
 
+# Установка расширения Redis
+RUN pecl install redis && docker-php-ext-enable redis
+
 # Устанавливаем Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
