@@ -21,6 +21,14 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'telegram_id',
+        'telegram_username',
+        'telegram_first_name',
+        'telegram_last_name',
+        'telegram_photo_url',
+        'is_premium',
+        'language_code',
+        'auth_date',
     ];
 
     /**
@@ -43,6 +51,42 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'auth_date' => 'datetime',
+            'is_premium' => 'boolean',
         ];
+    }
+
+    /**
+     * Найти пользователя по Telegram ID
+     */
+    public static function findByTelegramId($telegramId)
+    {
+        return static::where('telegram_id', $telegramId)->first();
+    }
+
+    /**
+     * Создать пользователя из данных Telegram
+     */
+    public static function createFromTelegram(array $telegramData)
+    {
+        return static::create([
+            'name' => trim(($telegramData['first_name'] ?? '') . ' ' . ($telegramData['last_name'] ?? '')),
+            'telegram_id' => $telegramData['id'],
+            'telegram_username' => $telegramData['username'] ?? null,
+            'telegram_first_name' => $telegramData['first_name'] ?? null,
+            'telegram_last_name' => $telegramData['last_name'] ?? null,
+            'telegram_photo_url' => $telegramData['photo_url'] ?? null,
+            'is_premium' => $telegramData['is_premium'] ?? false,
+            'language_code' => $telegramData['language_code'] ?? 'en',
+            'auth_date' => now(),
+        ]);
+    }
+
+    /**
+     * Проверить, является ли пользователь пользователем Telegram
+     */
+    public function isTelegramUser(): bool
+    {
+        return !is_null($this->telegram_id);
     }
 }

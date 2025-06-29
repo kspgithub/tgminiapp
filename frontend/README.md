@@ -1,69 +1,134 @@
-# React + TypeScript + Vite
+# Telegram Mini App - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React-приложение для Telegram Mini App с автоматической авторизацией через Telegram WebApp API.
 
-Currently, two official plugins are available:
+## 🚀 Быстрый старт
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 1. Установка зависимостей
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 2. Настройка окружения
+```bash
+cp .env.example .env
 ```
+
+Отредактируйте `.env` файл и укажите URL вашего API:
+```env
+VITE_API_URL=https://ваш-домен.com/api
+VITE_DEV_MODE=false
+```
+
+### 3. Запуск в режиме разработки
+```bash
+npm run dev
+```
+
+### 4. Сборка для продакшена
+```bash
+npm run build
+```
+
+## 📱 Функциональность
+
+### Автоматическая авторизация
+- Приложение автоматически инициализируется при открытии в Telegram
+- Пользователь авторизуется через Telegram WebApp API без дополнительных действий
+- Токен сохраняется в localStorage для последующих сессий
+
+### Компоненты
+- **LoadingSpinner** - Экран загрузки
+- **ErrorMessage** - Обработка ошибок с возможностью повтора
+- **UserProfile** - Профиль пользователя с информацией из Telegram
+- **AuthContext** - Контекст для управления состоянием авторизации
+
+### Возможности Telegram WebApp
+- Использование нативных элементов Telegram (кнопки, тактильная обратная связь)
+- Адаптация под тему Telegram (светлая/темная)
+- Полноэкранный режим
+- Закрытие приложения через Telegram API
+
+## 🔧 Технологии
+
+- **React 19** с TypeScript
+- **Tailwind CSS** для стилизации
+- **Axios** для HTTP запросов
+- **Vite** как сборщик
+- **Telegram WebApp API** для интеграции с Telegram
+
+## 📦 Структура проекта
+
+```
+src/
+├── components/           # React компоненты
+│   ├── LoadingSpinner.tsx
+│   ├── ErrorMessage.tsx
+│   └── UserProfile.tsx
+├── contexts/            # React контексты
+│   └── AuthContext.tsx
+├── services/            # Сервисы для работы с API
+│   └── api.ts
+├── types/               # TypeScript типы
+│   └── telegram.ts
+├── App.tsx              # Главный компонент
+└── main.tsx             # Точка входа
+```
+
+## 🌐 Развертывание
+
+### Для разработки
+1. Запустите фронтенд: `npm run dev`
+2. Используйте ngrok для создания HTTPS туннеля:
+   ```bash
+   npx ngrok http 5173
+   ```
+3. Укажите полученный URL в настройках бота в @BotFather
+
+### Для продакшена
+1. Соберите проект: `npm run build`
+2. Загрузите содержимое папки `dist` на ваш сервер
+3. Настройте веб-сервер для обслуживания статических файлов
+4. Укажите URL вашего домена в настройках бота
+
+## 🔒 Безопасность
+
+- Все данные пользователя получаются через официальный Telegram WebApp API
+- Подпись данных проверяется на бэкенде
+- Токены имеют ограниченное время жизни
+- Чувствительные данные не хранятся в localStorage
+
+## 🐛 Отладка
+
+### Проблемы с авторизацией
+1. Убедитесь, что приложение открыто в Telegram
+2. Проверьте, что скрипт Telegram WebApp загружается
+3. Откройте DevTools и проверьте консоль на ошибки
+4. Убедитесь, что API доступен по указанному URL
+
+### Для локальной разработки
+- Используйте HTTPS (через ngrok) - Telegram WebApp работает только с HTTPS
+- Проверьте CORS настройки на бэкенде
+- Убедитесь, что бот правильно настроен в @BotFather
+
+## 📝 API
+
+Приложение взаимодействует с бэкендом через следующие endpoints:
+
+- `POST /api/auth/telegram/login` - Авторизация через Telegram
+- `GET /api/auth/me` - Получение данных текущего пользователя
+- `GET /api/test` - Проверка работоспособности API
+
+## 💡 Советы
+
+1. **Тестирование**: Всегда тестируйте в реальном Telegram, а не в браузере
+2. **Дизайн**: Используйте цвета темы Telegram для лучшей интеграции
+3. **Производительность**: Минимизируйте количество API запросов
+4. **UX**: Добавляйте тактильную обратную связь для лучшего пользовательского опыта
+
+## 🔗 Полезные ссылки
+
+- [Telegram Bot API](https://core.telegram.org/bots/api)
+- [Telegram WebApp Documentation](https://core.telegram.org/bots/webapps)
+- [React Documentation](https://react.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
