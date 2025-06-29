@@ -1,0 +1,72 @@
+services:
+  proxy:
+    image: nginxproxy/nginx-proxy:alpine
+    hostname: proxy
+    container_name: nginx-proxy
+    environment:
+      TZ: Europe/Moscow
+      LANG: ru_RU.UTF-8
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - nginx_certs:/etc/nginx/certs
+      - nginx_vhost:/etc/nginx/vhost.d
+      - nginx_html:/usr/share/nginx/html
+    ports:
+      - "80:80"
+      - "443:443"
+    labels:
+      - com.github.nginx-proxy.nginx
+    restart: always
+  le:
+    image: nginxproxy/acme-companion
+    hostname: le
+    container_name: acme-companion
+    environment:
+      TZ: Europe/Moscow
+      LANG: ru_RU.UTF-8
+      DEFAULT_EMAIL: semk1602@gmail.com
+      NGINX_PROXY_CONTAINER: nginx-proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - nginx_certs:/etc/nginx/certs
+      - nginx_vhost:/etc/nginx/vhost.d
+      - nginx_html:/usr/share/nginx/html
+      - acme:/etc/acme.sh
+    depends_on:
+      - proxy
+    restart: always
+
+  db:
+    image: postgres
+    hostname: db
+    shm_size: 128mb
+    environment:
+      TZ: Europe/Moscow
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: backend
+    volumes:
+      - db:/var/lib/postgresql/data/pgdata
+    restart: always
+
+  cache:
+    image: redis
+    hostname: cache
+    environment:
+      TZ: Europe/Moscow
+    volumes:
+      - cache:/data:cached
+    command:
+      - redis-server
+      - --appendonly
+      - "yes"
+    restart: always
+
+volumes:
+  db:
+  cache:
+  nginx_certs:
+  nginx_vhost:
+  nginx_html:
+  acme:

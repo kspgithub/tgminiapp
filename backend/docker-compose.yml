@@ -1,0 +1,16 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: backend
+    container_name: backend
+    environment:
+      TZ: Europe/Moscow
+      LANG: ru_RU.UTF-8
+      VIRTUAL_HOST: api.kspgame.ru
+      LETSENCRYPT_HOST: api.kspgame.ru
+      LETSENCRYPT_EMAIL: semk1602@gmail.com
+    expose:
+      - "80"
+    restart: unless-stopped

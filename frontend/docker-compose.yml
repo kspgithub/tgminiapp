@@ -1,0 +1,15 @@
+services:
+  frontend:
+    build:
+      context: .
+      target: web
+    environment:
+      TZ: Europe/Moscow
+      LANG: ru_RU.UTF-8
+      VIRTUAL_HOST: kspgame.ru
+      LETSENCRYPT_HOST: kspgame.ru
+      LETSENCRYPT_EMAIL: semk1602@gmail.com
+    hostname: frontend
+    expose:
+      - "80"
+    restart: always
